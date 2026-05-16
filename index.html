@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Mono's Barbería Holguín</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{
+      --green:#1a3d2b;--green-dark:#0f2019;--green-mid:#234d36;
+      --gold:#c9a84c;--gold-light:#e2c97e;--gold-dark:#a07830;
+      --cream:#f5edda;--cream-dim:#d8ccb0;
+    }
+    html{scroll-behavior:smooth}
+    body{font-family:'DM Sans',sans-serif;background:var(--green-dark);color:var(--cream);min-height:100vh}
+
+    /* HERO */
+    .hero{background:var(--green);text-align:center;padding:2.5rem 1.5rem 2rem;border-bottom:1px solid var(--gold-dark);position:relative;overflow:hidden}
+    .hero::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(45deg,transparent,transparent 50px,rgba(201,168,76,.04) 50px,rgba(201,168,76,.04) 100px);pointer-events:none}
+    .logo-img{width:min(400px,90vw);height:auto;display:block;margin:0 auto 1rem}
+    .logo-sub{font-size:10px;color:var(--gold-dark);letter-spacing:4px;text-transform:uppercase;font-weight:300;margin-bottom:1rem}
+    .divider{display:flex;align-items:center;gap:12px;justify-content:center;margin:.75rem auto 1rem;max-width:260px}
+    .dl{flex:1;height:.5px;background:linear-gradient(to right,transparent,var(--gold-dark))}
+    .dlr{background:linear-gradient(to left,transparent,var(--gold-dark))}
+    .divider-scissor{color:var(--gold);font-size:20px}
+    .tagline{font-size:12px;color:var(--cream-dim);letter-spacing:2px;opacity:.65;font-weight:300}
+
+    /* SECTIONS */
+    .section{padding:2rem 1.25rem;border-bottom:.5px solid rgba(201,168,76,.15);max-width:700px;margin:0 auto;width:100%}
+    .section-title{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:400;color:var(--gold);display:flex;align-items:center;gap:10px;margin-bottom:.2rem}
+    .section-sub{font-size:10px;color:var(--gold-dark);letter-spacing:2px;text-transform:uppercase;font-weight:300;margin-bottom:1.5rem}
+
+    /* SERVICES GRID */
+    .svc-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px}
+    .svc-card{background:var(--green);border:.5px solid rgba(201,168,76,.25);border-radius:10px;padding:1rem;cursor:pointer;transition:border-color .15s,background .15s;position:relative;user-select:none}
+    .svc-card:hover{border-color:rgba(201,168,76,.6);background:var(--green-mid)}
+    .svc-card.sel{border:1.5px solid var(--gold);background:var(--green-mid)}
+    .check-dot{display:none;position:absolute;top:9px;right:9px;width:20px;height:20px;background:var(--gold);border-radius:50%;align-items:center;justify-content:center}
+    .svc-card.sel .check-dot{display:flex}
+    .check-dot::after{content:'✓';font-size:11px;color:var(--green-dark);font-weight:700}
+    .svc-icon{font-size:22px;margin-bottom:8px;opacity:.85}
+    .svc-name{font-family:'Cormorant Garamond',serif;font-size:17px;font-weight:500;color:var(--gold-light);margin-bottom:4px}
+    .svc-desc{font-size:11px;color:var(--cream-dim);opacity:.6;margin-bottom:10px;line-height:1.5}
+    .svc-meta{display:flex;align-items:center;justify-content:space-between}
+    .svc-dur{font-size:10px;color:var(--gold-dark);letter-spacing:.5px}
+    .svc-price{font-family:'Cormorant Garamond',serif;font-size:19px;font-weight:600;color:var(--gold)}
+    .svc-price sub{font-size:10px;font-family:'DM Sans',sans-serif;color:var(--gold-dark);font-weight:300;vertical-align:baseline}
+
+    /* SUMMARY */
+    .summary{background:var(--green);border:.5px solid rgba(201,168,76,.25);border-radius:10px;padding:1rem 1.25rem;margin-bottom:1.25rem;display:flex;align-items:center;justify-content:space-between;gap:1rem}
+    .sum-left{flex:1;min-width:0}
+    .sum-count{font-size:13px;font-weight:500;color:var(--cream-dim)}
+    .sum-names{font-size:11px;color:var(--gold-dark);margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .sum-right{text-align:right;flex-shrink:0}
+    .sum-total{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:600;color:var(--gold);line-height:1}
+    .sum-cup{font-size:10px;color:var(--gold-dark);letter-spacing:1px}
+
+    /* FORM */
+    .form-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px}
+    .fg{display:flex;flex-direction:column;gap:5px}
+    .fg.full{grid-column:1/-1}
+    .fg label{font-size:10px;color:var(--gold-dark);letter-spacing:1.5px;text-transform:uppercase;font-weight:400}
+    .fg input,.fg select,.fg textarea{background:var(--green);border:.5px solid rgba(201,168,76,.3);border-radius:8px;padding:10px 12px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--cream);outline:none;width:100%;transition:border-color .15s;-webkit-appearance:none;appearance:none}
+    .fg input:focus,.fg select:focus,.fg textarea:focus{border-color:var(--gold)}
+    .fg select option{background:var(--green-dark);color:var(--cream)}
+    .fg textarea{resize:none;height:72px;line-height:1.5}
+
+    .btn-res{width:100%;padding:14px;background:var(--gold);color:var(--green-dark);border:none;border-radius:8px;font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:600;cursor:pointer;letter-spacing:1px;transition:background .15s,opacity .15s;margin-top:.75rem}
+    .btn-res:hover{background:var(--gold-light)}
+    .btn-res:disabled{opacity:.28;cursor:not-allowed}
+
+    .succ{display:none;background:var(--green-mid);border:.5px solid var(--gold);border-radius:10px;padding:1.75rem 1.5rem;text-align:center;margin-top:1rem}
+    .succ-icon{font-size:36px;margin-bottom:10px;display:block;color:var(--gold)}
+    .succ p{font-family:'Cormorant Garamond',serif;font-size:20px;color:var(--gold-light);margin-bottom:6px}
+    .succ small{font-size:12px;color:var(--cream-dim);opacity:.7}
+
+    /* SCHEDULE */
+    .sch-row{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:.5px solid rgba(201,168,76,.1);font-size:13px}
+    .sch-row:last-child{border-bottom:none}
+    .sch-day{color:var(--cream-dim);opacity:.7}
+    .sch-time{font-family:'Cormorant Garamond',serif;font-size:16px;color:var(--gold-light)}
+
+    /* CONTACT */
+    .cc-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:8px}
+    .cc{background:var(--green);border:.5px solid rgba(201,168,76,.18);border-radius:10px;padding:1rem}
+    .cc-icon{font-size:20px;margin-bottom:6px;opacity:.85}
+    .cc-lbl{font-size:10px;color:var(--gold-dark);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:4px}
+    .cc-val{font-size:12px;color:var(--cream-dim);line-height:1.6}
+    .cc-val a{color:var(--gold-light);text-decoration:none}
+    .cc-val a:hover{color:var(--gold);text-decoration:underline}
+
+    .footer{text-align:center;padding:2rem 1.5rem;font-size:11px;color:var(--gold-dark);letter-spacing:2px;text-transform:uppercase;opacity:.55}
+
+    @media(max-width:400px){.form-row{grid-template-columns:1fr}.fg.full{grid-column:1}}
+  </style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <img class="logo-img" src="logo.png" alt="Mono's Barbería Holguín"/>
+  <div class="logo-sub">Barbería · Holguín, Cuba</div>
+  <div class="divider">
+    <div class="dl"></div>
+    <span class="divider-scissor">◆</span>
+    <div class="dl dlr"></div>
+  </div>
+  <div class="tagline">Estilo &nbsp;·&nbsp; Precisión &nbsp;·&nbsp; Tradición</div>
+</div>
+
+<!-- SERVICES -->
+<div class="section">
+  <div class="section-title">Servicios</div>
+  <div class="section-sub">Selecciona los servicios que deseas</div>
+  <div class="svc-grid">
+
+    <div class="svc-card" onclick="tog(1)" id="c1">
+      <div class="check-dot"></div>
+      <div class="svc-icon">◆</div>
+      <div class="svc-name">Corte sencillo</div>
+      <div class="svc-desc">Corte clásico con tijera o máquina.</div>
+      <div class="svc-meta">
+        <div class="svc-dur">30 min</div>
+        <div class="svc-price">$200<sub> CUP</sub></div>
+      </div>
+    </div>
+
+    <div class="svc-card" onclick="tog(2)" id="c2">
+      <div class="check-dot"></div>
+      <div class="svc-icon">◆</div>
+      <div class="svc-name">Degradado</div>
+      <div class="svc-desc">Fade profesional, skin o low fade.</div>
+      <div class="svc-meta">
+        <div class="svc-dur">30 min</div>
+        <div class="svc-price">$400<sub> CUP</sub></div>
+      </div>
+    </div>
+
+    <div class="svc-card" onclick="tog(3)" id="c3">
+      <div class="check-dot"></div>
+      <div class="svc-icon">◆</div>
+      <div class="svc-name">Barba</div>
+      <div class="svc-desc">Perfilado y arreglo de barba.</div>
+      <div class="svc-meta">
+        <div class="svc-dur">30 min</div>
+        <div class="svc-price">$100<sub> CUP</sub></div>
+      </div>
+    </div>
+
+    <div class="svc-card" onclick="tog(4)" id="c4">
+      <div class="check-dot"></div>
+      <div class="svc-icon">◆</div>
+      <div class="svc-name">Diseño</div>
+      <div class="svc-desc">Diseños y detalles personalizados.</div>
+      <div class="svc-meta">
+        <div class="svc-dur">30 min</div>
+        <div class="svc-price">$100<sub> CUP</sub></div>
+      </div>
+    </div>
+
+    <div class="svc-card" onclick="tog(5)" id="c5">
+      <div class="check-dot"></div>
+      <div class="svc-icon">◆</div>
+      <div class="svc-name">Peinado</div>
+      <div class="svc-desc">Styling y acabado con productos.</div>
+      <div class="svc-meta">
+        <div class="svc-dur">30 min</div>
+        <div class="svc-price">$200<sub> CUP</sub></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- BOOKING -->
+<div class="section">
+  <div class="section-title">Tu reserva</div>
+  <div class="section-sub">Completa tus datos para agendar</div>
+
+  <div class="summary">
+    <div class="sum-left">
+      <div class="sum-count" id="sum-count">Ningún servicio seleccionado</div>
+      <div class="sum-names" id="sum-names"></div>
+    </div>
+    <div class="sum-right">
+      <div class="sum-total" id="sum-total">$0</div>
+      <div class="sum-cup">CUP</div>
+    </div>
+  </div>
+
+  <div class="form-row">
+    <div class="fg"><label>Nombre</label><input type="text" id="inp-name" placeholder="Tu nombre"/></div>
+    <div class="fg"><label>Teléfono</label><input type="tel" id="inp-phone" placeholder="+53 5000 0000"/></div>
+  </div>
+  <div class="form-row">
+    <div class="fg"><label>Fecha</label><input type="date" id="inp-date"/></div>
+    <div class="fg">
+      <label>Hora</label>
+      <select id="inp-time">
+        <option value="">Seleccionar</option>
+        <optgroup label="Mañana">
+          <option>9:00 AM</option><option>9:30 AM</option><option>10:00 AM</option>
+          <option>10:30 AM</option><option>11:00 AM</option><option>11:30 AM</option>
+        </optgroup>
+        <optgroup label="Tarde">
+          <option>2:00 PM</option><option>2:30 PM</option><option>3:00 PM</option>
+          <option>3:30 PM</option><option>4:00 PM</option><option>4:30 PM</option>
+        </optgroup>
+      </select>
+    </div>
+  </div>
+  <div class="form-row">
+    <div class="fg full"><label>Nota adicional</label><textarea id="inp-note" placeholder="Ej: quiero un fade alto, tengo cabello grueso..."></textarea></div>
+  </div>
+
+  <button class="btn-res" id="btn-res" disabled onclick="doReserve()">Reservar mi cita ✦</button>
+
+  <div class="succ" id="succ">
+    <span class="succ-icon">✓</span>
+    <p id="succ-text">¡Reserva recibida!</p>
+    <small>Nos comunicaremos contigo al número que dejaste para confirmar tu cita.</small>
+  </div>
+</div>
+
+<!-- HORARIOS -->
+<div class="section">
+  <div class="section-title">Horarios</div>
+  <div class="section-sub">Lunes a sábado</div>
+  <div class="sch-row"><span class="sch-day">Mañana</span><span class="sch-time">9:00 AM — 12:00 PM</span></div>
+  <div class="sch-row"><span class="sch-day">Tarde</span><span class="sch-time">2:00 PM — 5:00 PM</span></div>
+  <div class="sch-row"><span class="sch-day">Domingo</span><span class="sch-time" style="opacity:.35">Cerrado</span></div>
+</div>
+
+<!-- CONTACTO -->
+<div class="section" style="border-bottom:none">
+  <div class="section-title">Contacto</div>
+  <div class="section-sub">Encuéntranos</div>
+  <div class="cc-grid">
+    <div class="cc">
+      <div class="cc-lbl">Teléfono</div>
+      <div class="cc-val"><a href="tel:+5358592776">+53 5859 2776</a></div>
+    </div>
+    <div class="cc">
+      <div class="cc-lbl">Instagram</div>
+      <div class="cc-val"><a href="https://www.instagram.com/monos_barberia_holguin?igsh=enRpZmZ1ZmRtMWhq&utm_source=qr" target="_blank">@monos_barberia_holguin</a></div>
+    </div>
+    <div class="cc">
+      <div class="cc-lbl">Facebook</div>
+      <div class="cc-val"><a href="https://www.facebook.com/share/1LTqghoZsb/?mibextid=wwXIfr" target="_blank">Mono's Barbería</a></div>
+    </div>
+    <div class="cc">
+      <div class="cc-lbl">Dirección</div>
+      <div class="cc-val"><a href="https://maps.app.goo.gl/wLsWuXGRpKSTLnEA6?g_st=ic" target="_blank">Calle Maceo 254 entre Cables y Ángel Guerra</a></div>
+    </div>
+  </div>
+</div>
+
+<div class="footer">✦ &nbsp; Mono's Barbería Holguín &nbsp;·&nbsp; Todos los derechos reservados &nbsp; ✦</div>
+
+<script>
+  const prices = {1:200,2:400,3:100,4:100,5:200};
+  const names  = {1:'Corte sencillo',2:'Degradado',3:'Barba',4:'Diseño',5:'Peinado'};
+  const sel = new Set();
+
+  function tog(id) {
+    sel.has(id) ? sel.delete(id) : sel.add(id);
+    document.getElementById('c'+id).classList.toggle('sel', sel.has(id));
+    upd();
+  }
+
+  function upd() {
+    const items = [...sel];
+    const total = items.reduce((a,id) => a + prices[id], 0);
+    document.getElementById('sum-total').textContent = '$' + total;
+    document.getElementById('sum-count').textContent =
+      items.length === 0 ? 'Ningún servicio seleccionado' :
+      items.length === 1 ? '1 servicio seleccionado' :
+      items.length + ' servicios seleccionados';
+    document.getElementById('sum-names').textContent = items.map(id => names[id]).join(' · ');
+    chk();
+  }
+
+  function chk() {
+    const ok = sel.size > 0
+      && document.getElementById('inp-name').value.trim()
+      && document.getElementById('inp-phone').value.trim()
+      && document.getElementById('inp-date').value
+      && document.getElementById('inp-time').value;
+    document.getElementById('btn-res').disabled = !ok;
+  }
+
+  ['inp-name','inp-phone','inp-date','inp-time'].forEach(id =>
+    document.getElementById(id).addEventListener('input', chk)
+  );
+
+  function doReserve() {
+    const name = document.getElementById('inp-name').value.trim();
+    const date = document.getElementById('inp-date').value;
+    const time = document.getElementById('inp-time').value;
+    document.getElementById('btn-res').style.display = 'none';
+    document.getElementById('succ-text').textContent =
+      '¡Listo, ' + name + '! Tu cita el ' + date + ' a las ' + time + ' fue agendada.';
+    document.getElementById('succ').style.display = 'block';
+  }
+
+  document.getElementById('inp-date').setAttribute('min', new Date().toISOString().split('T')[0]);
+</script>
+</body>
+</html>
